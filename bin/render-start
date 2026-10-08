@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# db:prepare yerine db:migrate: db:prepare boş veritabanında seed çalıştırabilir
+# (production'da demo hesapları oluşturmasını istemiyoruz).
+bin/rails db:migrate
+
+exec bin/rails server -b 0.0.0.0 -p "${PORT:-10000}"
