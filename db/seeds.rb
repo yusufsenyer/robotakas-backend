@@ -1,5 +1,13 @@
 # RoboTakas seed verisi. Idempotent: veritabanı boş değilse hiçbir şey yapmaz.
 # Mevcut veriyi asla silmez ya da sıfırlamaz.
+#
+# Üretimde demo admin/kullanıcıları (sabit parola) oluşturmamak için varsayılan
+# olarak kapalıdır. Bilinçli çalıştırma yalnız ALLOW_DEMO_SEED=yes ile mümkündür.
+if Rails.env.production? && ENV["ALLOW_DEMO_SEED"] != "yes"
+  abort "db/seeds.rb demo/örnek hesaplar oluşturur ve production'da çalıştırılmamalıdır. " \
+        "Bilinçli çalıştırma için: ALLOW_DEMO_SEED=yes bin/rails db:seed"
+end
+
 return if Category.exists?
 
 # --- Kategori yapısı (1. seviye: yarışma, 2. seviye: parça türü) ---

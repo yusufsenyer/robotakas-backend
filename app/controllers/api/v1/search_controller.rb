@@ -22,12 +22,13 @@ module Api
         like = "%#{q.downcase}%"
         prefix = "#{q.downcase}%"
 
+        prefix_order = Part.sanitize_sql_array(
+          [ "CASE WHEN LOWER(code) LIKE ? THEN 0 ELSE 1 END", prefix ]
+        )
+
         parts = Part.approved
           .where("LOWER(code) LIKE :like OR LOWER(name) LIKE :like", like: like)
-          .order(
-            Arel.sql("CASE WHEN LOWER(code) LIKE '#{prefix}' THEN 0 ELSE 1 END"),
-            :code,
-          )
+          .order(Arel.sql(prefix_order), :code)
           .limit(5)
 
         counts = Listing.active.where(part_id: parts.map(&:id)).group(:part_id).count
