@@ -1,8 +1,6 @@
-# SQLite. Versions 3.8.0 and up are supported.
+# SQLite is used in development and test. Production uses PostgreSQL (Supabase).
 #   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
+#   gem install pg
 #
 default: &default
   adapter: sqlite3
@@ -16,25 +14,26 @@ development:
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
+# Set TEST_DATABASE_URL to run the test suite against PostgreSQL;
+# the default remains SQLite.
 test:
+<% if ENV["TEST_DATABASE_URL"] %>
+  url: <%= ENV["TEST_DATABASE_URL"] %>
+<% else %>
   <<: *default
   database: storage/test.sqlite3
+<% end %>
 
-# Store production database in the storage/ directory, which by default
-# is mounted as a persistent Docker volume in config/deploy.yml.
+# Production is a single PostgreSQL database (Supabase session pooler).
+# Session pooler (host ...pooler.supabase.com:5432) supports prepared
+# statements and advisory locks, so no extra settings are required.
+#
+# If you switch to the transaction pooler (port 6543), uncomment both:
+#   prepared_statements: false
+#   advisory_locks: false
 production:
-  primary:
-    <<: *default
-    database: storage/production.sqlite3
-  cache:
-    <<: *default
-    database: storage/production_cache.sqlite3
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *default
-    database: storage/production_queue.sqlite3
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *default
-    database: storage/production_cable.sqlite3
-    migrations_paths: db/cable_migrate
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 3) %>
+  sslmode: require
+  # prepared_statements: false
+  # advisory_locks: false

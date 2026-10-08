@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.1].define(version: 2026_10_07_130200) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -115,8 +118,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_07_130200) do
     t.integer "forum_post_id"
     t.datetime "created_at", null: false
     t.index ["forum_post_id"], name: "index_forum_likes_on_forum_post_id"
-    t.index ["user_id", "forum_post_id"], name: "index_forum_likes_on_user_id_and_forum_post_id", unique: true, where: "forum_post_id IS NOT NULL"
-    t.index ["user_id", "forum_topic_id"], name: "index_forum_likes_on_user_id_and_forum_topic_id", unique: true, where: "forum_topic_id IS NOT NULL"
+    t.index ["user_id", "forum_post_id"], name: "index_forum_likes_on_user_id_and_forum_post_id", unique: true, where: "(forum_post_id IS NOT NULL)"
+    t.index ["user_id", "forum_topic_id"], name: "index_forum_likes_on_user_id_and_forum_topic_id", unique: true, where: "(forum_topic_id IS NOT NULL)"
     t.index ["user_id"], name: "index_forum_likes_on_user_id"
   end
 
@@ -270,7 +273,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_07_130200) do
 
   create_table "site_stats", force: :cascade do |t|
     t.string "key", null: false
-    t.integer "value", limit: 8, default: 0, null: false
+    t.bigint "value", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_site_stats_on_key", unique: true
