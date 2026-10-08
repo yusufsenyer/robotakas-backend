@@ -80,11 +80,14 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # Allowed hosts come from ALLOWED_HOSTS (comma-separated) and Render's
-  # RENDER_EXTERNAL_HOSTNAME. Leave both unset to allow any host.
+  # Allowed hosts come from ALLOWED_HOSTS (comma-separated), the public site
+  # host (SITE_HOST — the Vercel frontend proxies here and forwards it via
+  # X-Forwarded-Host) and Render's RENDER_EXTERNAL_HOSTNAME.
+  # Leave all unset to allow any host.
   config.hosts = [
     *ENV.fetch("ALLOWED_HOSTS", "").split(",").map(&:strip).reject(&:empty?),
-    ENV["RENDER_EXTERNAL_HOSTNAME"]
+    ENV["SITE_HOST"].presence,
+    ENV["RENDER_EXTERNAL_HOSTNAME"].presence
   ].compact
 
   # Skip DNS rebinding protection for the default health check endpoint.
