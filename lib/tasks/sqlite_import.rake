@@ -80,20 +80,22 @@ namespace :db do
     puts "== db:import_from_sqlite =="
 
     counts = {}
-    import_order.each do |table, model|
-      rows = read_source.call(table)
-      rows = order_categories.call(rows) if table == "categories"
-      rows = prepare.call(model, rows)
+    ActiveRecord::Base.transaction do
+      import_order.each do |table, model|
+        rows = read_source.call(table)
+        rows = order_categories.call(rows) if table == "categories"
+        rows = prepare.call(model, rows)
 
-      model.insert_all!(rows) if rows.any?
-      conn.reset_pk_sequence!(table) if rows.any?
+        model.insert_all!(rows) if rows.any?
+        conn.reset_pk_sequence!(table) if rows.any?
 
-      counts[table] = [ rows.size, conn.select_value("SELECT COUNT(*) FROM #{conn.quote_table_name(table)}").to_i ]
-      puts format("%-32s kaynak=%-4d hedef=%-4d", table, counts[table][0], counts[table][1])
+        counts[table] = [ rows.size, conn.select_value("SELECT COUNT(*) FROM #{conn.quote_table_name(table)}").to_i ]
+        puts format("%-32s kaynak=%-4d hedef=%-4d", table, counts[table][0], counts[table][1])
+      end
+
+      mismatched = counts.select { |_table, (from, to)| from != to }
+      abort "Satır sayısı uyuşmuyor: #{mismatched.inspect}" if mismatched.any?
     end
-
-    mismatched = counts.select { |_table, (from, to)| from != to }
-    abort "Satır sayısı uyuşmuyor: #{mismatched.inspect}" if mismatched.any?
 
     puts "Tamamlandı: #{counts.values.sum(&:first)} satır aktarıldı."
   end
