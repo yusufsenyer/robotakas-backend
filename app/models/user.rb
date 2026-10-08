@@ -25,7 +25,7 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 8 }, if: -> { password.present? }
   validates :phone, format: {
     with: /\A05\d{9}\z/,
-    message: "geçerli bir Türkiye cep numarası olmalı",
+    message: "geçerli bir Türkiye cep numarası olmalı"
   }, allow_nil: true
 
   def admin?

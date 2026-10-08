@@ -38,7 +38,7 @@ module Api
                 {
                   id: listing.id,
                   title: listing.title,
-                  user: { id: listing.user_id, full_name: listing.user&.full_name },
+                  user: { id: listing.user_id, full_name: listing.user&.full_name }
                 }
               end
               AdminSerializer.part(
@@ -47,7 +47,7 @@ module Api
                 pending_listings: pending_listings,
               )
             end,
-            meta: meta,
+            meta: meta
           }
         end
 
@@ -87,7 +87,7 @@ module Api
 
           render json: {
             part: AdminSerializer.part(part),
-            activated_listing_count: pending_count,
+            activated_listing_count: pending_count
           }
         end
 
@@ -100,7 +100,7 @@ module Api
               code: "validation_failed",
               message: "Gerekçe 5–200 karakter arasında olmalı.",
               status: :unprocessable_entity,
-              fields: { reason: ["5–200 karakter arasında olmalı"] },
+              fields: { reason: [ "5–200 karakter arasında olmalı" ] },
             )
             return
           end
@@ -110,7 +110,7 @@ module Api
 
           render json: {
             part: AdminSerializer.part(part),
-            affected_listing_count: affected,
+            affected_listing_count: affected
           }
         end
 
@@ -134,7 +134,7 @@ module Api
         private
 
         def part_params
-          params.permit(:code, :name, :brand, :category_id, :description, specs: [:label, :value])
+          params.permit(:code, :name, :brand, :category_id, :description, specs: [ :label, :value ])
         end
 
         def part_attributes

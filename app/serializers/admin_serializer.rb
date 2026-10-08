@@ -14,10 +14,10 @@ module AdminSerializer
       suggested_by: part.suggested_by ? {
         id: part.suggested_by.id,
         full_name: part.suggested_by.full_name,
-        email: part.suggested_by.email,
+        email: part.suggested_by.email
       } : nil,
       created_at: part.created_at.iso8601,
-      listing_count: listing_count.nil? ? part.listings.count : listing_count,
+      listing_count: listing_count.nil? ? part.listings.count : listing_count
     }
     data[:pending_listings] = pending_listings if part.status == "pending"
     data
@@ -35,11 +35,11 @@ module AdminSerializer
       user: {
         id: listing.user_id,
         full_name: listing.user&.full_name,
-        email: listing.user&.email,
+        email: listing.user&.email
       },
       created_at: listing.created_at.iso8601,
       published_at: listing.published_at&.iso8601,
-      open_report_count: open_report_count,
+      open_report_count: open_report_count
     }
   end
 
@@ -58,10 +58,10 @@ module AdminSerializer
         status: report.listing&.status,
         user: report.listing&.user ? {
           id: report.listing.user_id,
-          full_name: report.listing.user.full_name,
-        } : nil,
+          full_name: report.listing.user.full_name
+        } : nil
       },
-      listing_open_report_count: listing_open_report_count,
+      listing_open_report_count: listing_open_report_count
     }
   end
 
@@ -71,7 +71,7 @@ module AdminSerializer
       title: announcement.title,
       body: announcement.body,
       published_at: announcement.published_at&.iso8601,
-      created_at: announcement.created_at.iso8601,
+      created_at: announcement.created_at.iso8601
     }
   end
 
@@ -86,7 +86,7 @@ module AdminSerializer
       listing_count: category.listings.count,
       compatible_count: ListingCompatibleCategory.where(category_id: category.id).count,
       part_count: category.parts.count,
-      children_count: category.children.count,
+      children_count: category.children.count
     }
   end
 end

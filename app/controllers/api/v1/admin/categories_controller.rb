@@ -15,7 +15,7 @@ module Api
               code: "validation_failed",
               message: "Alt kategori yalnızca bir yarışma kategorisinin altına eklenebilir.",
               status: :unprocessable_entity,
-              fields: { parent_id: ["yalnızca yarışma kategorisi altına eklenebilir"] },
+              fields: { parent_id: [ "yalnızca yarışma kategorisi altına eklenebilir" ] },
             )
             return
           end

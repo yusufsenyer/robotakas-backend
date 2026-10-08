@@ -39,10 +39,10 @@ class ApplicationController < ActionController::API
   end
 
   def paginate(relation)
-    page = [params[:page].to_i, 1].max
+    page = [ params[:page].to_i, 1 ].max
     per_page =
       if params[:per_page].present?
-        [[params[:per_page].to_i, 1].max, 50].min
+        [ [ params[:per_page].to_i, 1 ].max, 50 ].min
       else
         20
       end
@@ -51,7 +51,7 @@ class ApplicationController < ActionController::API
     total_pages = (total.to_f / per_page).ceil
     data = relation.offset((page - 1) * per_page).limit(per_page)
 
-    [data, { page: page, per_page: per_page, total: total, total_pages: total_pages }]
+    [ data, { page: page, per_page: per_page, total: total, total_pages: total_pages } ]
   end
 
   def render_not_found

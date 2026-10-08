@@ -16,7 +16,7 @@ class ListingTest < ActiveSupport::TestCase
         description: "Çalışır durumda.",
         condition: "used",
         price: 120,
-        city: "Ankara",
+        city: "Ankara"
       }.merge(overrides)
     )
   end

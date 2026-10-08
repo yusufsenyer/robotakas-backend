@@ -17,6 +17,6 @@ class CreateForumTopics < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :forum_topics, [:forum_board_id, :pinned, :last_activity_at]
+    add_index :forum_topics, [ :forum_board_id, :pinned, :last_activity_at ]
   end
 end

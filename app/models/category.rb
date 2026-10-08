@@ -30,7 +30,7 @@ class Category < ApplicationRecord
   end
 
   def descendant_ids
-    [id] + children.flat_map(&:descendant_ids)
+    [ id ] + children.flat_map(&:descendant_ids)
   end
 
   def path

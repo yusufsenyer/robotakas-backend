@@ -9,7 +9,7 @@ module Api
             open_reports: Report.open.count,
             sold_total: SiteStat.value("sold_total").to_i,
             total_users: User.count,
-            total_listings: Listing.count,
+            total_listings: Listing.count
           }
         end
       end

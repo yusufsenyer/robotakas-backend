@@ -17,7 +17,7 @@ module Api
             code: "validation_failed",
             message: "En az bir filtre gerekli.",
             status: :unprocessable_entity,
-            fields: { params: ["en az bir filtre"] },
+            fields: { params: [ "en az bir filtre" ] },
           )
           return
         end
@@ -60,7 +60,7 @@ module Api
           id: search.id,
           name: search.name,
           params: search.params,
-          created_at: search.created_at.iso8601,
+          created_at: search.created_at.iso8601
         }
       end
     end

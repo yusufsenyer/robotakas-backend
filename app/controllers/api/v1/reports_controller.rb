@@ -20,7 +20,7 @@ module Api
             code: "validation_failed",
             message: "Geçerli bir neden seç.",
             status: :unprocessable_entity,
-            fields: { reason: ["geçerli bir neden seç"] },
+            fields: { reason: [ "geçerli bir neden seç" ] },
           )
           return
         end
@@ -30,7 +30,7 @@ module Api
             code: "validation_failed",
             message: "Açıklama en fazla 500 karakter olabilir.",
             status: :unprocessable_entity,
-            fields: { details: ["en fazla 500 karakter"] },
+            fields: { details: [ "en fazla 500 karakter" ] },
           )
           return
         end
@@ -66,7 +66,7 @@ module Api
           reason: report.reason,
           details: report.details,
           status: report.status,
-          created_at: report.created_at.iso8601,
+          created_at: report.created_at.iso8601
         }
       end
     end

@@ -18,7 +18,7 @@ module CategorySerializer
       icon_key: category.icon_key,
       position: category.position,
       listing_count: listing_count,
-      children: child_nodes,
+      children: child_nodes
     }
   end
 end

@@ -31,7 +31,7 @@ module ConversationSerializer
       listing: listing_summary(listing),
       other_user: other_user_summary(conversation, user),
       last_message: last_message ? MessageSerializer.render(last_message) : nil,
-      unread_count: unread_count,
+      unread_count: unread_count
     }
   end
 
@@ -40,7 +40,7 @@ module ConversationSerializer
       id: conversation.id,
       role: conversation.role_for(user),
       listing: listing_summary(conversation.listing),
-      other_user: other_user_summary(conversation, user),
+      other_user: other_user_summary(conversation, user)
     }
   end
 
@@ -51,7 +51,7 @@ module ConversationSerializer
       price: listing.price,
       status: listing.status,
       cover_photo_url: ListingSerializer.cover_photo_url(listing),
-      part_code: listing.part&.code,
+      part_code: listing.part&.code
     }
   end
 

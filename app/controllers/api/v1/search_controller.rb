@@ -12,7 +12,7 @@ module Api
         render json: {
           parts: suggest_parts(q),
           listings: suggest_listings(q),
-          categories: suggest_categories(q),
+          categories: suggest_categories(q)
         }
       end
 
@@ -39,7 +39,7 @@ module Api
             slug: part.slug,
             name: part.name,
             brand: part.brand,
-            listing_count: counts[part.id] || 0,
+            listing_count: counts[part.id] || 0
           }
         end
       end
@@ -62,7 +62,7 @@ module Api
             id: listing.id,
             title: listing.title,
             price: listing.price,
-            part_code: listing.part&.code,
+            part_code: listing.part&.code
           }
         end
       end
@@ -78,7 +78,7 @@ module Api
               id: category.id,
               name: category.name,
               slug: category.slug,
-              path: category.path,
+              path: category.path
             }
           end
       end

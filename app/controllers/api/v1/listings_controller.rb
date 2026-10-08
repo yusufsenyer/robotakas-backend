@@ -2,7 +2,7 @@ module Api
   module V1
     class ListingsController < ApplicationController
       before_action :require_user!,
-        only: [:create, :update, :destroy, :remove, :favorite, :unfavorite]
+        only: [ :create, :update, :destroy, :remove, :favorite, :unfavorite ]
 
       def index
         listings = Listing.active
@@ -23,7 +23,7 @@ module Api
 
         render json: {
           listings: data.map { |l| ListingSerializer.list_item(l, favorite_ids: favorite_ids) },
-          meta: meta,
+          meta: meta
         }
       end
 
@@ -50,7 +50,7 @@ module Api
             code: "phone_required",
             message: "İlanda telefonu göstermek için profiline telefon ekle.",
             status: :unprocessable_entity,
-            fields: { phone: ["profilinde telefon yok"] },
+            fields: { phone: [ "profilinde telefon yok" ] },
           )
           return
         end
@@ -60,7 +60,7 @@ module Api
             code: "validation_failed",
             message: "En fazla 10 fotoğraf yüklenebilir.",
             status: :unprocessable_entity,
-            fields: { photos: ["en fazla 10 fotoğraf yüklenebilir"] },
+            fields: { photos: [ "en fazla 10 fotoğraf yüklenebilir" ] },
           )
           return
         end
@@ -96,7 +96,7 @@ module Api
             code: "phone_required",
             message: "İlanda telefonu göstermek için profiline telefon ekle.",
             status: :unprocessable_entity,
-            fields: { phone: ["profilinde telefon yok"] },
+            fields: { phone: [ "profilinde telefon yok" ] },
           )
           return
         end
@@ -186,7 +186,7 @@ module Api
             "WHEN LOWER(listings.title) LIKE ? THEN 2 ELSE 3 END",
             q,
             "#{q}%",
-            "%#{q}%",
+            "%#{q}%"
           ],
         )
 
@@ -275,7 +275,7 @@ module Api
       end
 
       def show_phone_requested?
-        ["true", "1", "on"].include?(params[:show_phone].to_s)
+        [ "true", "1", "on" ].include?(params[:show_phone].to_s)
       end
 
       def apply_part(listing, force:)
@@ -304,7 +304,7 @@ module Api
       end
 
       def remove_video(listing)
-        return unless ["true", "1", "on"].include?(params[:video_to_remove].to_s)
+        return unless [ "true", "1", "on" ].include?(params[:video_to_remove].to_s)
 
         listing.video.purge
       end

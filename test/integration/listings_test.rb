@@ -40,7 +40,7 @@ class ListingsTest < ActionDispatch::IntegrationTest
     get "/api/v1/listings"
     assert_response :success
     ids = JSON.parse(response.body)["listings"].map { |l| l["id"] }
-    assert_equal [@l1.id, @l2.id, @l3.id].sort, ids.sort
+    assert_equal [ @l1.id, @l2.id, @l3.id ].sort, ids.sort
   end
 
   test "list item and detail expose the category icon key" do
@@ -78,7 +78,7 @@ class ListingsTest < ActionDispatch::IntegrationTest
     get "/api/v1/listings", params: { q: "tb66", sort: "smart" }
     ids = JSON.parse(response.body)["listings"].map { |l| l["id"] }
 
-    assert_equal [@l1.id, @l2.id, title_only.id], ids
+    assert_equal [ @l1.id, @l2.id, title_only.id ], ids
   end
 
   test "category_id covers subtree and compatible tags" do
@@ -98,7 +98,7 @@ class ListingsTest < ActionDispatch::IntegrationTest
   test "category slug filters subtree" do
     get "/api/v1/listings", params: { category: @root.slug }
     ids = JSON.parse(response.body)["listings"].map { |l| l["id"] }
-    assert_equal [@l1.id, @l2.id, @l3.id].sort, ids.sort
+    assert_equal [ @l1.id, @l2.id, @l3.id ].sort, ids.sort
   end
 
   test "compatible_category slug filters by tag" do
@@ -139,7 +139,7 @@ class ListingsTest < ActionDispatch::IntegrationTest
     assert_difference -> { Listing.count }, 1 do
       post "/api/v1/listings", params: {
         title: "Yeni sürücü", description: "kısa açıklama", condition: "new", price: 150,
-        category_id: @leaf_motor.id, part_id: @part.id, city: "Ankara", district: "Çankaya",
+        category_id: @leaf_motor.id, part_id: @part.id, city: "Ankara", district: "Çankaya"
       }, as: :json
     end
 
@@ -162,7 +162,7 @@ class ListingsTest < ActionDispatch::IntegrationTest
         category_id: @leaf_motor.id,
         part_id: @part.id,
         city: "Ankara",
-        photos: [fixture_file_upload("test.png", "image/png")],
+        photos: [ fixture_file_upload("test.png", "image/png") ]
       }
     end
 
@@ -177,7 +177,7 @@ class ListingsTest < ActionDispatch::IntegrationTest
 
     post "/api/v1/listings", params: {
       title: "Telefonsuz ilan", description: "açıklama", condition: "new", price: 100,
-      category_id: @leaf_motor.id, part_id: @part.id, city: "İzmir", show_phone: "true",
+      category_id: @leaf_motor.id, part_id: @part.id, city: "İzmir", show_phone: "true"
     }, as: :json
 
     assert_response :unprocessable_entity

@@ -24,7 +24,7 @@ class Listing < ApplicationRecord
     numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 999 }
   validates :city, presence: true
   validates :status, inclusion: {
-    in: %w[pending_part part_rejected active removed],
+    in: %w[pending_part part_rejected active removed]
   }
   validate :seasons_used_only_for_used
   validate :category_must_be_leaf

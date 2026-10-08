@@ -52,7 +52,7 @@ module Api
             listings: data.map do |listing|
               AdminSerializer.listing(listing, open_report_count: report_counts[listing.id] || 0)
             end,
-            meta: meta,
+            meta: meta
           }
         end
 
@@ -69,7 +69,7 @@ module Api
               code: "validation_failed",
               message: "En az 1, en fazla 50 ilan seç.",
               status: :unprocessable_entity,
-              fields: { ids: ["en fazla 50 ilan"] },
+              fields: { ids: [ "en fazla 50 ilan" ] },
             )
             return
           end

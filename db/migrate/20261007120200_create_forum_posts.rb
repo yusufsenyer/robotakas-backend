@@ -9,6 +9,6 @@ class CreateForumPosts < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :forum_posts, [:forum_topic_id, :created_at]
+    add_index :forum_posts, [ :forum_topic_id, :created_at ]
   end
 end

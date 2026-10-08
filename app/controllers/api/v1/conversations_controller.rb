@@ -6,7 +6,7 @@ module Api
       def index
         conversations = current_user_conversations
           .ordered
-          .includes(:buyer, listing: [:user, :part, { photos_attachments: :blob }])
+          .includes(:buyer, listing: [ :user, :part, { photos_attachments: :blob } ])
 
         render json: ConversationSerializer.list_items(conversations, current_user)
       end
@@ -38,7 +38,7 @@ module Api
             code: "validation_failed",
             message: "Mesaj en fazla 1000 karakter olabilir.",
             status: :unprocessable_entity,
-            fields: { body: ["en fazla 1000 karakter"] },
+            fields: { body: [ "en fazla 1000 karakter" ] },
           )
           return
         end
@@ -64,7 +64,7 @@ module Api
 
         render json: {
           conversation: ConversationSerializer.detail(conversation, current_user),
-          messages: messages.map { |m| MessageSerializer.render(m) },
+          messages: messages.map { |m| MessageSerializer.render(m) }
         }
       end
 
@@ -92,7 +92,7 @@ module Api
             code: "validation_failed",
             message: "Mesaj boş olamaz.",
             status: :unprocessable_entity,
-            fields: { body: ["boş olamaz"] },
+            fields: { body: [ "boş olamaz" ] },
           )
           return
         end
@@ -102,7 +102,7 @@ module Api
             code: "validation_failed",
             message: "Mesaj en fazla 1000 karakter olabilir.",
             status: :unprocessable_entity,
-            fields: { body: ["en fazla 1000 karakter"] },
+            fields: { body: [ "en fazla 1000 karakter" ] },
           )
           return
         end

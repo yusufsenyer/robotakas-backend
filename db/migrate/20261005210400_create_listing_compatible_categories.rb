@@ -8,7 +8,7 @@ class CreateListingCompatibleCategories < ActiveRecord::Migration[8.1]
     end
 
     add_index :listing_compatible_categories,
-      [:listing_id, :category_id],
+      [ :listing_id, :category_id ],
       unique: true,
       name: "index_lcc_on_listing_and_category"
   end

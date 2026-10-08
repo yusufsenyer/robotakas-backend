@@ -7,7 +7,7 @@ class AuthTest < ActionDispatch::IntegrationTest
         full_name: "Test Kullanıcı",
         email: "test@example.com",
         password: "password123",
-        city: "Ankara",
+        city: "Ankara"
       }, as: :json
     end
 
@@ -61,7 +61,7 @@ class AuthTest < ActionDispatch::IntegrationTest
       full_name: "Test Kullanıcı",
       email: "logout@example.com",
       password: "password123",
-      city: "Ankara",
+      city: "Ankara"
     }, as: :json
 
     delete "/api/v1/auth/logout"
@@ -81,14 +81,14 @@ class AuthTest < ActionDispatch::IntegrationTest
       full_name: "Test Kullanıcı",
       email: "update@example.com",
       password: "password123",
-      city: "Ankara",
+      city: "Ankara"
     }, as: :json
 
     patch "/api/v1/me", params: {
       full_name: "Yeni Ad",
       city: "İzmir",
       team_name: "Ege Robotics",
-      phone: "0555 000-00-02",
+      phone: "0555 000-00-02"
     }, as: :json
 
     assert_response :success

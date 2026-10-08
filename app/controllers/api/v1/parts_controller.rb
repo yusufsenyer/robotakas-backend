@@ -1,7 +1,7 @@
 module Api
   module V1
     class PartsController < ApplicationController
-      before_action :require_user!, only: [:create]
+      before_action :require_user!, only: [ :create ]
 
       def index
         parts = Part.approved.includes(:category)
@@ -23,7 +23,7 @@ module Api
 
         render json: {
           parts: parts.map { |part| PartSerializer.summary(part, listing_count: counts[part.id] || 0) },
-          meta: meta,
+          meta: meta
         }
       end
 
@@ -44,7 +44,7 @@ module Api
         render json: {
           parts: parts.map do |part|
             PartSerializer.summary(part, min_price: min_prices[part.id])
-          end,
+          end
         }
       end
 
@@ -64,7 +64,7 @@ module Api
             code: "part_exists",
             message: "Bu parça zaten katalogda.",
             status: :unprocessable_entity,
-            fields: { slug: [existing.slug] },
+            fields: { slug: [ existing.slug ] },
           )
           return
         end

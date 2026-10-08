@@ -14,7 +14,7 @@ module ListingSerializer
       cover_photo_url: cover_photo_url(listing),
       photo_count: listing.photos.size,
       seller: seller_summary(listing.user),
-      favorited_by_me: favorite_ids ? favorite_ids.include?(listing.id) : false,
+      favorited_by_me: favorite_ids ? favorite_ids.include?(listing.id) : false
     }
   end
 
@@ -31,7 +31,7 @@ module ListingSerializer
       category: {
         id: listing.category_id,
         path: listing.category.path,
-        icon_key: listing.category.icon_key,
+        icon_key: listing.category.icon_key
       },
       city: listing.city,
       district: listing.district,
@@ -49,7 +49,7 @@ module ListingSerializer
       seller: seller_detail(listing.user),
       phone: listing.show_phone ? listing.user.phone : nil,
       favorited_by_me: listing.favorited_by?(current_user),
-      is_owner: listing.owner?(current_user),
+      is_owner: listing.owner?(current_user)
     }
   end
 
@@ -66,7 +66,7 @@ module ListingSerializer
       brand: part.brand,
       specs: part.specs || [],
       status: part.status,
-      reject_reason: part.reject_reason,
+      reject_reason: part.reject_reason
     }
   end
 

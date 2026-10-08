@@ -9,7 +9,7 @@ module PartSerializer
       category_id: part.category_id,
       category_path: part.category&.path,
       listing_count: listing_count || part.listings.active.count,
-      min_price: min_price,
+      min_price: min_price
     }
   end
 
@@ -31,9 +31,9 @@ module PartSerializer
         count: prices.size,
         min: prices.min,
         avg: prices.empty? ? nil : (prices.sum.to_f / prices.size).round,
-        max: prices.max,
+        max: prices.max
       },
-      listing_count: prices.size,
+      listing_count: prices.size
     }
   end
 end

@@ -100,7 +100,7 @@ class AdminTest < ActionDispatch::IntegrationTest
     assert_difference -> { Part.count }, 1 do
       post "/api/v1/admin/parts", params: {
         code: "L293D", name: "L293D Motor Sürücü", brand: "ST", category_id: @leaf.id,
-        description: "açıklama", specs: [{ label: "Kanal", value: "2" }],
+        description: "açıklama", specs: [ { label: "Kanal", value: "2" } ]
       }, as: :json
     end
     assert_response :created
@@ -151,7 +151,7 @@ class AdminTest < ActionDispatch::IntegrationTest
 
     post "/api/v1/admin/parts/#{pending.id}/approve", params: {
       name: "Düzenlenmiş ad", brand: "Marka", category_id: @leaf2.id,
-      description: "yeni açıklama", specs: [{ label: "A", value: "B" }],
+      description: "yeni açıklama", specs: [ { label: "A", value: "B" } ]
     }, as: :json
 
     assert_response :success
@@ -159,7 +159,7 @@ class AdminTest < ActionDispatch::IntegrationTest
     assert_equal "Düzenlenmiş ad", part["name"]
     assert_equal "Marka", part["brand"]
     assert_equal @leaf2.id, part["category"]["id"]
-    assert_equal [{ "label" => "A", "value" => "B" }], part["specs"]
+    assert_equal [ { "label" => "A", "value" => "B" } ], part["specs"]
   end
 
   test "reject requires reason and marks listings part_rejected" do
@@ -249,7 +249,7 @@ class AdminTest < ActionDispatch::IntegrationTest
 
     login_as(@admin)
     assert_difference -> { Listing.count }, -2 do
-      post "/api/v1/admin/listings/bulk_destroy", params: { ids: [@listing.id, l2.id] }, as: :json
+      post "/api/v1/admin/listings/bulk_destroy", params: { ids: [ @listing.id, l2.id ] }, as: :json
     end
     assert_response :success
     assert_equal 2, JSON.parse(response.body)["deleted_count"]

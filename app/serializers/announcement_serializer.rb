@@ -5,7 +5,7 @@ module AnnouncementSerializer
       title: announcement.title,
       body: announcement.body,
       published_at: announcement.published_at&.iso8601,
-      read: read_ids.include?(announcement.id),
+      read: read_ids.include?(announcement.id)
     }
   end
 end

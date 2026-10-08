@@ -116,7 +116,7 @@ class ConversationsTest < ActionDispatch::IntegrationTest
     get "/api/v1/conversations/#{conversation.id}/messages", params: { after: m1.id }
     assert_response :success
     ids = JSON.parse(response.body)["messages"].map { |m| m["id"] }
-    assert_equal [m2.id, m3.id], ids
+    assert_equal [ m2.id, m3.id ], ids
     assert m2.reload.read_at
     assert m3.reload.read_at
   end

@@ -21,7 +21,7 @@ module Api
                 listing_open_report_count: open_counts[report.listing_id] || 0,
               )
             end,
-            meta: meta,
+            meta: meta
           }
         end
 
