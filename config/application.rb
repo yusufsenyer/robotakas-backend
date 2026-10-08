@@ -33,7 +33,8 @@ module Backend
     config.session_store :cookie_store,
       key: "_robotakas_session",
       same_site: :lax,
-      httponly: true
+      httponly: true,
+      secure: Rails.env.production?
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, config.session_options
   end

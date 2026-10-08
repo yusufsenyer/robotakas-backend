@@ -132,4 +132,27 @@ class ListingTest < ActiveSupport::TestCase
     assert_nil ActiveStorage::Blob.find_by(id: blob.id)
     assert_not File.exist?(service.path_for(key))
   end
+
+  test "allowed video passes validation" do
+    listing = build_listing
+    listing.video.attach(io: StringIO.new("fakevideo"), filename: "clip.mp4", content_type: "video/mp4")
+    assert listing.valid?
+  end
+
+  test "video over 45 MB is rejected" do
+    listing = build_listing
+    listing.video.attach(io: StringIO.new("fakevideo"), filename: "clip.mp4", content_type: "video/mp4")
+    blob = listing.video.blob
+    def blob.byte_size = 46.megabytes
+
+    assert listing.invalid?
+    assert_includes listing.errors[:video], "video en fazla 45 MB olabilir"
+  end
+
+  test "video with a disallowed type is rejected" do
+    listing = build_listing
+    listing.video.attach(io: StringIO.new("fakevideo"), filename: "clip.avi", content_type: "video/x-msvideo")
+    assert listing.invalid?
+    assert_includes listing.errors[:video], "yalnızca mp4, webm ya da mov yüklenebilir"
+  end
 end

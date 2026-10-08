@@ -29,6 +29,7 @@ class Listing < ApplicationRecord
   validate :seasons_used_only_for_used
   validate :category_must_be_leaf
   validate :photos_within_limits
+  validate :video_within_limits
 
   scope :active, -> { where(status: "active") }
 
@@ -102,6 +103,18 @@ class Listing < ApplicationRecord
       unless photo.content_type.in?(%w[image/jpeg image/png image/webp])
         errors.add(:photos, "yalnızca jpeg, png ya da webp yüklenebilir")
       end
+    end
+  end
+
+  def video_within_limits
+    return unless video.attached?
+
+    if video.byte_size > 45.megabytes
+      errors.add(:video, "video en fazla 45 MB olabilir")
+    end
+
+    unless video.content_type.to_s.in?(%w[video/mp4 video/webm video/quicktime])
+      errors.add(:video, "yalnızca mp4, webm ya da mov yüklenebilir")
     end
   end
 end
