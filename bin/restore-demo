@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# RoboTakas demo geri yükleme. `--yes` olmadan hiçbir şey yapmaz,
+# yalnızca yapılacakları yazar. Geri yüklemeden önce mevcut durumu otomatik
+# yedekler. Rails kapalıyken çalıştırılmalıdır.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKEND_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+db_path() {
+  ruby -rerb -ryaml -e '
+    cfg = YAML.unsafe_load(ERB.new(File.read(ARGV[0])).result)
+    db = cfg["development"]["database"] || cfg.dig("development", "primary", "database")
+    print File.expand_path(db, ARGV[1])
+  ' "$BACKEND_DIR/config/database.yml" "$BACKEND_DIR"
+}
+
+usage() {
+  echo "Kullanım: restore-demo <yedek_klasörü> [--yes]"
+  echo "  --yes olmadan hiçbir şey yapılmaz, yalnızca yapılacaklar yazılır."
+}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+FOLDER="$1"
+YES="${2:-}"
+
+if [ ! -d "$FOLDER" ]; then
+  echo "Yedek klasörü bulunamadı: $FOLDER"
+  exit 1
+fi
+
+if [ "$YES" != "--yes" ]; then
+  echo "Kuru çalışma (hiçbir şey değiştirilmedi):"
+  echo "  Yedek klasör: $FOLDER"
+  echo "  Önce mevcut durum otomatik yedeklenecek, sonra:"
+  echo "    - $FOLDER içindeki SQLite dosyası geri yüklenecek"
+  echo "    - $FOLDER içindeki storage/ geri yüklenecek"
+  echo "  Devam etmek için: $0 \"$FOLDER\" --yes"
+  exit 0
+fi
+
+echo "UYARI: Rails kapalıyken çalıştırılmalıdır."
+
+# Önce mevcut durumu otomatik yedekle.
+"$SCRIPT_DIR/backup-demo" >/dev/null
+
+DB_PATH="$(db_path)"
+
+SQLITE_BACKUP="$(find "$FOLDER" -maxdepth 1 -name 'development.sqlite3' -print -quit)"
+if [ -n "$SQLITE_BACKUP" ]; then
+  cp "$SQLITE_BACKUP" "$DB_PATH"
+  echo "SQLite geri yüklendi: $DB_PATH"
+else
+  echo "UYARI: yedekte development.sqlite3 bulunamadı."
+fi
+
+if [ -d "$FOLDER/storage" ]; then
+  rm -rf "$BACKEND_DIR/storage"
+  cp -a "$FOLDER/storage" "$BACKEND_DIR/storage"
+  echo "storage/ geri yüklendi."
+else
+  echo "UYARI: yedekte storage/ bulunamadı."
+fi
+
+echo "Geri yükleme tamamlandı."

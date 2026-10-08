@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# RoboTakas demo yedeği: SQLite (tutarlı kopya) + storage/ klasörünü
+# zaman damgalı `backups/YYYYMMDD-HHMMSS/` klasörüne kopyalar.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKEND_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$BACKEND_DIR/backups/$TIMESTAMP"
+
+db_path() {
+  ruby -rerb -ryaml -e '
+    cfg = YAML.unsafe_load(ERB.new(File.read(ARGV[0])).result)
+    db = cfg["development"]["database"] || cfg.dig("development", "primary", "database")
+    print File.expand_path(db, ARGV[1])
+  ' "$BACKEND_DIR/config/database.yml" "$BACKEND_DIR"
+}
+
+DB_PATH="$(db_path)"
+mkdir -p "$BACKUP_DIR"
+
+if command -v sqlite3 >/dev/null 2>&1; then
+  sqlite3 "$DB_PATH" ".backup '$BACKUP_DIR/development.sqlite3'"
+  echo "SQLite tutarlı kopya (.backup): $BACKUP_DIR/development.sqlite3"
+else
+  cp "$DB_PATH" "$BACKUP_DIR/development.sqlite3"
+  echo "UYARI: sqlite3 CLI bulunamadı; düz kopya alındı (Rails kapalıyken güvenli)."
+fi
+
+if [ -d "$BACKEND_DIR/storage" ]; then
+  cp -a "$BACKEND_DIR/storage" "$BACKUP_DIR/storage"
+  echo "storage/ kopyalandı: $BACKUP_DIR/storage"
+fi
+
+echo "Yedek alındı: $BACKUP_DIR"
