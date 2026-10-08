@@ -7,7 +7,7 @@ namespace :data do
     old_admin = old_admin_email.present? ? User.find_by(email: old_admin_email) : nil
     demo_scope = User.where("email LIKE ?", "%@robotakas.test").order(:id)
 
-    puts "== data:harden DRY-RUN =="
+    puts "== data:harden =="
 
     if old_admin_email.blank?
       puts "OLD_ADMIN_EMAIL verilmedi: eski admin düşürme adımı atlanacak."
@@ -44,7 +44,7 @@ namespace :data do
     end
 
     if demo_password
-      demo_scope.find_each do |user|
+      demo_scope.each do |user|
         user.update!(password: demo_password)
         changes += 1
       end
