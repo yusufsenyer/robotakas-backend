@@ -103,8 +103,8 @@ sqlite3 storage/development.sqlite3 ".backup '/tmp/rt/dev_snapshot.sqlite3'"
 ### 8.1 Env (terminalde)
 
 ```bash
+export SECRET_KEY_BASE="$(openssl rand -hex 64)"   # veya dev'de: bin/rails secret
 export RAILS_ENV=production
-export SECRET_KEY_BASE="$(bin/rails secret)"
 export DATABASE_URL="postgresql://postgres.<ref>:<pwd>@aws-0-<region>.pooler.supabase.com:5432/postgres?sslmode=require"
 export SUPABASE_S3_ENDPOINT="https://<ref>.supabase.co/storage/v1/s3"
 export SUPABASE_S3_REGION="<region>"
