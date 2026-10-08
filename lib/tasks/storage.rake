@@ -14,6 +14,7 @@ namespace :storage do
       next
     end
 
+    total = scope.count
     scope.find_each do |blob|
       path = source_root.join(blob.key[0, 2], blob.key[2, 2], blob.key)
       abort "Dosya bulunamadı: #{path}" unless File.exist?(path)
@@ -23,14 +24,13 @@ namespace :storage do
           blob.key, io,
           checksum: blob.checksum,
           filename: blob.filename.to_s,
-          content_type: blob.content_type,
-          disposition: blob.disposition,
+          content_type: blob.content_type
         )
       end
       blob.update_columns(service_name: "supabase")
       puts "Yüklendi: ##{blob.id} · #{blob.filename}"
     end
 
-    puts "Tamamlandı: #{scope.count} blob Supabase'e yüklendi."
+    puts "Tamamlandı: #{total} blob Supabase'e yüklendi."
   end
 end
